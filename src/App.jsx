@@ -104,7 +104,7 @@ function SectionEyebrow({ index, children }) {
 
 function Hero() {
   return <section className="hero container" id="home" aria-label="Introduction">
-    <div className="hero-copy"><div className="availability"><span className="ping-dot"/> OPEN TO OPPORTUNITIES <span className="availability-slash">/</span> 2027 OJT</div>
+    <div className="hero-copy"><div className="availability"><span className="ping-dot"/> OPEN TO OPPORTUNITIES <span className="availability-slash"></span></div>
       <div className="hero-kicker">HELLO WORLD <span>—</span> I'M KENT G. MEDINA</div>
       <h1>Code. Create.<br/><span className="gradient-text">Go beyond.</span></h1>
       <p className="hero-description">Fourth-year IT student building practical web applications and exploring the world of <strong>Computer.</strong></p>
