@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { projects, certs, tagLabels, education, awards, skillGroups } from './data';
+import { projects, certs, tagLabels, education, awards, skillGroups } from './data.js';
 
 const EMAIL = 'kentmedina88@gmail.com';
 const socials = [
@@ -64,7 +64,7 @@ function Header({ theme, toggleTheme }) {
     <div className="header-inner container">
       <a className="brand" href="#home" onClick={() => setOpen(false)} aria-label="Kent Medina portfolio home"><span className="brand-mark"><img src="/assets/logo-dark.png" alt="" /></span></a>
       <nav className={`nav-links ${open ? 'nav-open' : ''}`} aria-label="Main navigation">
-        {[['About', '#about'], ['Education', '#education'], ['Projects', '#projects'], ['Certificates', '#certificates'], ['Contact', '#contact']].map(([label, href]) => <a key={href} href={href} onClick={() => setOpen(false)}>{label}</a>)}
+        {[['About', '#about'], ['Tech Stack', '#tech-stack'], ['Education', '#education'], ['Projects', '#projects'], ['Certificates', '#certificates'], ['Contact', '#contact']].map(([label, href]) => <a key={href} href={href} onClick={() => setOpen(false)}>{label}</a>)}
       </nav>
       <div className="header-actions">
         <button type="button" className="theme-toggle" onClick={toggleTheme} aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`} title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}><Icon name={theme === 'dark' ? 'sun' : 'moon'} size={18}/><span>{theme === 'dark' ? 'Light' : 'Dark'}</span></button>
@@ -126,11 +126,137 @@ function Metrics() {
 }
 
 function About() {
-  return <section className="section container" id="about"><SectionEyebrow index="01">GET TO KNOW ME</SectionEyebrow><div className="about-layout"><div><h2 className="section-heading">A little about<br/><span className="outline-text">the person.</span></h2><p className="body-copy">I'm <strong>Kent G. Medina</strong>, an IT student at La Salle University Ozamiz who builds full-stack web apps and works with machine learning.</p><p className="body-copy">For my capstone, I <strong>led the design and deployment of an inventory and sales system</strong> for a local business. I'm looking for an <strong>internship or entry-level web development role.</strong></p><a className="text-link" href="#contact">Let's work together <Icon name="arrow" size={18}/></a></div><div className="skills-panel"><div className="panel-topline"><span className="panel-cross">✳</span><span>MY TOOLKIT</span><span className="panel-counter">{skillGroups.reduce((n, g) => n + g.items.length, 0)} SKILLS</span></div><h3>Things I work with<span>.</span></h3><div className="skill-groups">{skillGroups.map(group => <div className="skill-group" key={group.label}><span className="skill-group-label">{group.label}</span><div className="skill-tags">{group.items.map(skill => <span key={skill} className="skill-tag">{skill}</span>)}</div></div>)}</div></div></div></section>;
+  return <section className="section container" id="about">
+    <SectionEyebrow index="01">GET TO KNOW ME</SectionEyebrow>
+    <div className="about-layout">
+      <div>
+        <h2 className="section-heading">A little about<br/><span className="outline-text">the person.</span></h2>
+        <p className="body-copy">I'm <strong>Kent G. Medina</strong>, an IT student at La Salle University Ozamiz who builds full-stack web apps and works with machine learning.</p>
+        <p className="body-copy"> I turn ideas into code, bugs into lessons, and coffee into projects. From building websites to developing full-stack systems, I enjoy figuring out how things work and making them work better. Currently on a mission to <strong>gain real-world experience, sharpen my skills, and build things that actually matter.</strong> </p>        
+        <a className="text-link" href="#contact">Let's work together <Icon name="arrow" size={18}/></a>
+      </div>
+      <div className="skills-panel about-focus-panel">
+        <div className="panel-topline"><span className="panel-cross">✳</span><span>WHAT I DO</span></div>
+        <h3>Areas I'm exploring<span>.</span></h3>
+        <div className="focus-list">
+          <div><Icon name="code" size={20}/><span><strong>Web development</strong><small>Building practical and responsive web applications.</small></span></div>
+          <div><Icon name="database" size={20}/><span><strong>Data & machine learning</strong><small>Working with datasets, analysis, and predictive models.</small></span></div>
+          <div><Icon name="shield" size={20}/><span><strong>IT systems & security</strong><small>Learning about systems, networks, and secure development.</small></span></div>
+        </div>
+        <a className="text-link" href="#tech-stack">See my complete tech stack <Icon name="arrow" size={18}/></a>
+      </div>
+    </div>
+  </section>;
+}
+
+// Built-in mappings also support older data.js files that store skill names as strings.
+// Entries without an available logo are excluded from the gallery.
+const legacyLogoIds = {
+  'HTML': 'devicon:html5', 'HTML5': 'devicon:html5',
+  'CSS': 'devicon:css3', 'CSS3': 'devicon:css3',
+  'JavaScript': 'devicon:javascript', 'TypeScript': 'devicon:typescript',
+  'Python': 'devicon:python', 'PHP': 'devicon:php',
+  'C++': 'devicon:cplusplus', 'C#': 'devicon:csharp',
+  'React': 'devicon:react', 'Node.js': 'devicon:nodejs',
+  'Express.js': 'devicon:express', 'Laravel': 'devicon:laravel',
+  'Flask': 'devicon:flask', 'Vite': 'devicon:vitejs',
+  'MediaPipe': 'simple-icons:mediapipe',
+  'Pandas': 'devicon:pandas', 'NumPy': 'devicon:numpy',
+  'scikit-learn': 'devicon:scikitlearn',
+  'Matplotlib': 'devicon:matplotlib', 'Jupyter': 'devicon:jupyter',
+  'Tableau': 'simple-icons:tableau', 'Power BI': 'simple-icons:powerbi',
+  'MySQL': 'devicon:mysql', 'MongoDB': 'devicon:mongodb',
+  'Firebase': 'devicon:firebase', 'Vercel': 'devicon:vercel',
+  'GitHub Pages': 'simple-icons:githubpages',
+  'Git': 'devicon:git', 'GitHub': 'devicon:github',
+  'VS Code': 'devicon:vscode', 'Figma': 'devicon:figma',
+  'Unity': 'devicon:unity', 'PowerShell': 'devicon:powershell',
+  'Excel / Google Sheets': 'simple-icons:microsoftexcel',
+  'Excel': 'simple-icons:microsoftexcel',
+  'Google Sheets': 'simple-icons:googlesheets',
+  'Joblib': 'simple-icons:python',
+};
+
+function normalizeTechTool(tool) {
+  if (typeof tool === 'string') {
+    return legacyLogoIds[tool] ? { name: tool, icon: legacyLogoIds[tool] } : null;
+  }
+  if (!tool || typeof tool.name !== 'string') return null;
+  const icon = (typeof tool.icon === 'string' && tool.icon.includes(':'))
+    ? tool.icon : legacyLogoIds[tool.name];
+  return icon ? { name: tool.name, icon, color: tool.color } : null;
+}
+
+function TechStack() {
+  const [unavailable, setUnavailable] = useState([]);
+  const [inView, setInView] = useState(false);
+  const sectionRef = useRef(null);
+  // Scroll animation: play the reveal once, when the section enters the screen.
+  useEffect(() => {
+    const node = sectionRef.current;
+    if (!node || typeof IntersectionObserver === 'undefined') { setInView(true); return undefined; }
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { setInView(true); observer.disconnect(); }
+    }, { threshold: 0.18 });
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+  const hideMissingLogo = (icon) => {
+    setUnavailable((current) => current.includes(icon) ? current : [...current, icon]);
+  };
+
+  // Bad or missing logo URLs remove the affected tool rather than crashing the page.
+  const groups = (Array.isArray(skillGroups) ? skillGroups : [])
+    .map((group) => ({
+      label: group?.label || 'Other tools',
+      items: (Array.isArray(group?.items) ? group.items : [])
+        .map(normalizeTechTool)
+        .filter((tool) => tool && !unavailable.includes(tool.icon)),
+    }))
+    .filter((group) => group.items.length > 0);
+  const count = groups.reduce((total, group) => total + group.items.length, 0);
+
+  return <section ref={sectionRef} className={`section container tech-section ${inView ? 'in-view' : ''}`} id="tech-stack">
+    <SectionEyebrow index="02">MY TECH STACK</SectionEyebrow>
+    <div className="section-heading-row">
+      <h2 className="section-heading">Languages &amp; <span className="heading-accent">frameworks.</span></h2>
+      <p>The languages and frameworks I use to build things.</p>
+    </div>
+    <div className="tech-stack-panel">
+      <div className="tech-stack-top"><span className="tech-stack-status"><span className="online-dot"/> TECH TOOLKIT</span><span className="tech-stack-total">{count} TECHNOLOGIES</span></div>
+      {groups.map((group, groupIndex) => {
+        // Repeat short rows so one set is always wider than the screen (no gap in the loop).
+        const repeats = Math.max(1, Math.ceil(14 / group.items.length));
+        const setItems = Array.from({ length: repeats }, () => group.items).flat();
+        return <div className="tech-category" key={group.label}>
+          <h3>{group.label}</h3>
+          <div className="tech-marquee" style={{ '--duration': `${Math.max(setItems.length * 3.2, 36)}s` }}>
+            <div className={`tech-track ${groupIndex % 2 ? 'reverse' : ''}`}>
+              {[0, 1].map((copy) => <div className="tech-set" key={copy} aria-hidden={copy === 1 ? 'true' : undefined}>
+                {setItems.map((tool, i) => {
+                  const iconPath = tool.icon.replace(':', '/');
+                  const colorQuery = tool.color ? `?color=${encodeURIComponent(tool.color)}` : '';
+                  return <div className="tech-tile" key={`${tool.name}-${i}`} tabIndex={copy === 0 ? 0 : -1} style={{ '--i': Math.min(i, 14) }}>
+                    <img
+                      src={`https://api.iconify.design/${iconPath}.svg${colorQuery}`}
+                      alt={copy === 0 ? `${tool.name} logo` : ''}
+                      loading="lazy"
+                      onError={() => hideMissingLogo(tool.icon)}
+                    />
+                    <span className="tech-tile-name">{tool.name}</span>
+                  </div>;
+                })}
+              </div>)}
+            </div>
+          </div>
+        </div>;
+      })}
+    </div>
+  </section>;
 }
 
 function Education() {
-  return <section className="section container" id="education"><SectionEyebrow index="02">BACKGROUND</SectionEyebrow><div className="section-heading-row"><h2 className="section-heading">Education &amp;<br/><span className="outline-text">honors.</span></h2><p>Where I'm studying and what I've been recognized for so far.</p></div>
+  return <section className="section container" id="education"><SectionEyebrow index="03">BACKGROUND</SectionEyebrow><div className="section-heading-row"><h2 className="section-heading">Education &amp;<br/><span className="outline-text">honors.</span></h2><p>Where I'm studying and what I've been recognized for so far.</p></div>
     <div className="edu-grid">
       <article className="edu-card"><div className="edu-meta"><span>EDUCATION</span><span>{education.years}</span></div><h3>{education.degree}</h3><p className="edu-school">{education.school}</p><div className="edu-courses-label">RELEVANT COURSEWORK</div><div className="skill-tags edu-courses">{education.coursework.map(c => <span className="skill-tag" key={c}>{c}</span>)}</div></article>
       <article className="edu-card"><div className="edu-meta"><span>AWARDS &amp; HONORS</span><span>{awards.length} TOTAL</span></div><ul className="award-list">{awards.map(a => <li key={a.title}><div><strong>{a.title}</strong><span>{a.place}</span></div><em>{a.year}</em></li>)}</ul></article>
@@ -141,7 +267,7 @@ function Education() {
 function Projects() {
   const [filter, setFilter] = useState('all');
   const filtered = useMemo(() => filter === 'all' ? projects : projects.filter(project => project.tags.includes(filter)), [filter]);
-  return <section className="section container" id="projects"><SectionEyebrow index="03">SELECTED WORK</SectionEyebrow><div className="section-heading-row"><h2 className="section-heading">Projects<span className="heading-accent">.</span></h2><p>Things I've built, tested, and learned from along the way.</p></div>
+  return <section className="section container" id="projects"><SectionEyebrow index="04">SELECTED WORK</SectionEyebrow><div className="section-heading-row"><h2 className="section-heading">Projects<span className="heading-accent">.</span></h2><p>Things I've built, tested, and learned from along the way.</p></div>
     <div className="project-filters" role="group" aria-label="Filter projects by technology">{filters.map(item => <button type="button" key={item.key} aria-pressed={filter === item.key} className={`filter-button ${filter === item.key ? 'active' : ''}`} onClick={() => setFilter(item.key)}>{item.label}</button>)}</div>
     <div className="projects-grid">{filtered.length ? filtered.map((project) => {
       const index = projects.indexOf(project);
@@ -161,7 +287,7 @@ function CertThumbnail({ cert }) {
 }
 
 function Certificates({ openCert }) {
-  return <section className="section container" id="certificates"><SectionEyebrow index="04">CREDENTIALS & CONTINUOUS LEARNING</SectionEyebrow><div className="section-heading-row"><h2 className="section-heading">Proof of<br/><span className="outline-text">progress.</span></h2><p>Workshops, bootcamps, and learning experiences that helped shape my skills.</p></div>
+  return <section className="section container" id="certificates"><SectionEyebrow index="05">CREDENTIALS & CONTINUOUS LEARNING</SectionEyebrow><div className="section-heading-row"><h2 className="section-heading">Proof of<br/><span className="outline-text">progress.</span></h2><p>Workshops, bootcamps, and learning experiences that helped shape my skills.</p></div>
     <div className="certificate-grid">{certs.map((cert, index) => <article className="certificate-card" key={cert.data}>
       <CertThumbnail cert={cert}/><div className="certificate-content"><div className="certificate-meta"><span>{cert.date}</span><span>NO. {String(index + 1).padStart(2, '0')}</span></div><h3>{cert.name}</h3><p>{cert.issuer}</p><button className="certificate-open" type="button" onClick={() => openCert(cert)}>Preview certificate <Icon name="external" size={16}/></button></div>
     </article>)}</div>
@@ -184,7 +310,7 @@ function Contact() {
     }
   };
   useEffect(() => { if (!copied) return; const timeout = setTimeout(() => setCopied(false), 2400); return () => clearTimeout(timeout); }, [copied]);
-  return <section className="section container contact-section" id="contact"><SectionEyebrow index="05">LET'S CONNECT</SectionEyebrow><div className="contact-panel"><span className="contact-orbit" aria-hidden="true"/><div className="contact-inner"><div className="availability contact-availability"><span className="ping-dot"/> CURRENTLY OPEN TO OPPORTUNITIES</div><h2>Have an idea?<br/><span className="gradient-text">Let's build it.</span></h2><p>I'm always interested in great conversations, opportunities, and projects worth creating.</p><div className="contact-actions"><a className="button primary-button" href={`mailto:${EMAIL}`}>Send me an email <Icon name="arrow" size={17}/></a><button className="button ghost-button copy-button" type="button" onClick={copyEmail}><Icon name={copied ? 'check' : 'copy'} size={17}/>{copied ? 'Copied!' : 'Copy email'}</button></div><a className="contact-email" href={`mailto:${EMAIL}`}>{EMAIL}</a></div></div></section>;
+  return <section className="section container contact-section" id="contact"><SectionEyebrow index="06">LET'S CONNECT</SectionEyebrow><div className="contact-panel"><span className="contact-orbit" aria-hidden="true"/><div className="contact-inner"><div className="availability contact-availability"><span className="ping-dot"/> CURRENTLY OPEN TO OPPORTUNITIES</div><h2>Have an idea?<br/><span className="gradient-text">Let's build it.</span></h2><p>I'm always interested in great conversations, opportunities, and projects worth creating.</p><div className="contact-actions"><a className="button primary-button" href={`mailto:${EMAIL}`}>Send me an email <Icon name="arrow" size={17}/></a><button className="button ghost-button copy-button" type="button" onClick={copyEmail}><Icon name={copied ? 'check' : 'copy'} size={17}/>{copied ? 'Copied!' : 'Copy email'}</button></div><a className="contact-email" href={`mailto:${EMAIL}`}>{EMAIL}</a></div></div></section>;
 }
 
 function CertificateModal({ cert, onClose }) {
@@ -215,5 +341,7 @@ export default function App() {
     document.documentElement.dataset.theme = theme;
     try { localStorage.setItem('kgm-theme', theme); } catch { /* blocked storage */ }
   }, [theme]);
-  return <><GalaxyBackground/><Header theme={theme} toggleTheme={() => setTheme(t => t === 'dark' ? 'light' : 'dark')}/><main><Hero/><Metrics/><About/><Education/><Projects/><Certificates openCert={setActiveCert}/><Contact/></main><Footer/><CertificateModal cert={activeCert} onClose={() => setActiveCert(null)}/></>;
+  return <><GalaxyBackground/><Header theme={theme} toggleTheme={() => setTheme(t => t === 'dark' ? 'light' : 'dark')}/><main><Hero/><Metrics/><About/><TechStack/><Education/><Projects/><Certificates openCert={setActiveCert}/><Contact/></main><Footer/><CertificateModal cert={activeCert} onClose={() => setActiveCert(null)}/></>;
 }
+
+

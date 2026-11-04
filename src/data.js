@@ -50,13 +50,29 @@ export const awards = [
   { title: "Best in Work Immersion", place: "Senior High School, Mahayag School of Arts and Trade", year: "2022" }
 ];
 
+// Languages and frameworks only. Each icon uses Iconify's public SVG API.
+// If an icon fails to load, App.jsx automatically hides that skill.
 export const skillGroups = [
-  { label: "Languages", items: ["HTML", "CSS", "JavaScript", "Python", "PHP"] },
-  { label: "Frameworks & libraries", items: ["React", "Node.js", "Express.js", "Laravel", "MediaPipe"] },
-  { label: "Machine learning", items: ["Computer vision", "Pandas", "NumPy", "Joblib", "XGBRegressor", "scikit-learn"] },
-  { label: "Databases & tools", items: ["MySQL", "Firebase", "Git", "GitHub", "GitHub Pages"] },
-  { label: "Other", items: ["System administration basics", "Excel / Google Sheets", "Technical writing", "CCTV installation"] }
+  {
+    label: "Languages & frameworks",
+    items: [
+      { name: "HTML5", icon: "devicon:html5" },
+      { name: "CSS3", icon: "devicon:css3" },
+      { name: "JavaScript", icon: "devicon:javascript" },
+      { name: "TypeScript", icon: "devicon:typescript" },
+      { name: "Python", icon: "devicon:python" },
+      { name: "PHP", icon: "devicon:php" },
+      { name: "C++", icon: "devicon:cplusplus" },
+      { name: "C#", icon: "devicon:csharp" },
+      { name: "React", icon: "devicon:react" },
+      { name: "Node.js", icon: "devicon:nodejs" },
+      { name: "Laravel", icon: "devicon:laravel" },
+      { name: "Flask", icon: "devicon:flask" },
+      { name: "Vite", icon: "devicon:vitejs" }
+    ]
+  }
 ];
+
 // certificates
 export const certs = [
   {
@@ -124,4 +140,3 @@ export const tagLabels = {
   python: "Python",
   php: "PHP"
 };
-
