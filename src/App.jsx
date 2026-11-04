@@ -78,12 +78,21 @@ function Header({ theme, toggleTheme }) {
 
 function IDBadge() {
   const [imageFailed, setImageFailed] = useState(false);
+  const [backImageFailed, setBackImageFailed] = useState(false);
+  const [flipped, setFlipped] = useState(false);
+  const toggleFlip = () => setFlipped((value) => !value);
+  const onFlipKey = (event) => {
+    if (event.target !== event.currentTarget) return;
+    if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); toggleFlip(); }
+  };
   return <div className="badge-stage">
     <div className="badge-aura" />
     <div className="badge-aura secondary" />
     <div className="float-label float-label-top"><span className="ping-dot"/> DIGITAL CREATOR</div>
     <div className="float-label float-label-bottom">DESIGNED TO BUILD <span>↗</span></div>
-    <div className="identity-card" aria-label="Stylized identification card of Kent G. Medina">
+    <div className={`id-flip ${flipped ? 'flipped' : ''}`} role="button" tabIndex={0} aria-pressed={flipped} aria-label="Digital ID card of Kent G. Medina. Press to flip it and read a short bio." onClick={toggleFlip} onKeyDown={onFlipKey}>
+    <div className="id-flip-inner">
+    <div className="identity-card" aria-hidden={flipped ? 'true' : undefined}>
       <div className="id-top"><span className="id-logo"><img className="id-logo-img" src="/assets/logo-light.png" alt="KM logo" /></span><span className="id-auth"><span className="online-dot"/> CREATOR PROFILE</span></div>
       <div className="id-slot"/>
       <div className="id-picture">
@@ -94,7 +103,24 @@ function IDBadge() {
       <div className="id-information"><span className="id-caption">IDENTITY / 001</span><h2>KENT G.<br/><strong>MEDINA</strong></h2><p>Information Technology Student</p><div className="id-line"/><div className="id-bottom"><div><small>ORGANIZATION</small><strong>La Salle University Ozamis</strong></div><span className="barcode" aria-hidden="true"/></div></div>
       <div className="id-reflection" aria-hidden="true" />
     </div>
-    <div className="stage-caption">INTERACTIVE DIGITAL ID <span>—</span> HOVER TO INSPECT</div>
+    <div className="identity-card id-back" aria-hidden={flipped ? undefined : 'true'}>
+      <div className="id-top"><span className="id-logo"><img className="id-logo-img" src="/assets/logo-light.png" alt="" /></span><span className="id-auth"><span className="online-dot"/> ABOUT ME</span></div>
+      <div className="id-slot"/>
+      <div className="id-back-body">
+        <span className="id-caption">ABOUT THIS PERSON</span>
+        <div className="id-back-photo">
+          {backImageFailed ? <div className="id-photo-fallback"><span>KGM</span><small>ADD YOUR CUTOUT</small></div> : <img src="/assets/BackProfile.png" alt="Kent G. Medina" decoding="async" onError={() => setBackImageFailed(true)} />}
+        </div>
+        <p className="id-back-bio">This person's hobbies are playing sports like pickleball, badminton, and volleyball, and running. He also loves his motorcycle and sometimes rides it to relieve stress. He likes to doom scroll, too, and when he's bored, he builds a website just for fun and to learn a new language or framework.</p>
+        <div className="id-back-foot">
+          <div className="id-back-links">{socials.filter((item) => item.label !== 'Facebook').map((item) => <a key={item.label} href={item.url} target="_blank" rel="noopener noreferrer" tabIndex={flipped ? 0 : -1} onClick={(event) => event.stopPropagation()}>{item.label}</a>)}</div>
+          <span className="id-flip-hint">CLICK TO FLIP BACK</span>
+        </div>
+      </div>
+    </div>
+    </div>
+    </div>
+    <div className="stage-caption">INTERACTIVE DIGITAL ID <span>—</span> CLICK TO FLIP</div>
   </div>;
 }
 
@@ -132,7 +158,13 @@ function About() {
       <div>
         <h2 className="section-heading">A little about<br/><span className="outline-text">the person.</span></h2>
         <p className="body-copy">I'm <strong>Kent G. Medina</strong>, an IT student at La Salle University Ozamiz who builds full-stack web apps and works with machine learning.</p>
-        <p className="body-copy">For my capstone, I <strong>led the design and deployment of an inventory and sales system</strong> for a local business. I'm looking for an <strong>internship or entry-level web development role.</strong></p>
+        <p className="body-copy">
+          I turn ideas into code, bugs into lessons, and coffee into projects.
+          From building websites to developing full-stack systems,
+          I enjoy figuring out how things work and making them work better.
+          Currently on a mission to <strong>gain real-world experience,
+          sharpen my skills, and build things that actually matter.</strong>
+        </p>
         <a className="text-link" href="#contact">Let's work together <Icon name="arrow" size={18}/></a>
       </div>
       <div className="skills-panel about-focus-panel">
@@ -430,6 +462,8 @@ export default function App() {
   }, [theme]);
   return <><GalaxyBackground/><Header theme={theme} toggleTheme={() => setTheme(t => t === 'dark' ? 'light' : 'dark')}/><main><Hero/><Metrics/><About/><TechStack/><Education/><Projects/><Certificates openCert={setActiveCert}/><Contact/></main><Footer/><CertificateModal cert={activeCert} onClose={() => setActiveCert(null)}/></>;
 }
+
+
 
 
 

@@ -590,4 +590,45 @@ h1,h2,h3,p { margin-top:0; }
   .tech-section.in-view .tech-tile { animation:none; }
 }
 
+/* ===== ID card: flip to read a short bio ===== */
+.id-flip { position:relative; z-index:5; width:321px; perspective:1300px; cursor:pointer; transform:rotate(6deg); animation:badge-float 7s ease-in-out infinite; transition:transform .5s cubic-bezier(.2,.8,.2,1); outline:none; -webkit-tap-highlight-color:transparent; }
+.id-flip:hover, .id-flip.flipped { transform:rotate(0deg) translateY(-8px) scale(1.035); }
+.id-flip:focus-visible { outline:3px solid var(--mint); outline-offset:12px; border-radius:26px; }
+.id-flip-inner { position:relative; min-height:439px; transform-style:preserve-3d; transition:transform .95s cubic-bezier(.3,1.2,.4,1); }
+.id-flip.flipped .id-flip-inner { transform:rotateY(180deg); }
 
+/* Both faces: the tilt, float and hover now live on the wrapper */
+.id-flip .identity-card,
+.id-flip .identity-card:hover { transform:none; animation:none; backface-visibility:hidden; -webkit-backface-visibility:hidden; }
+.id-flip:hover .identity-card { box-shadow:0 0 0 7px rgba(59,190,95,.09),0 0 105px rgba(88,255,139,.44),0 38px 76px rgba(0,0,0,.62); }
+.id-flip .identity-card.id-back,
+.id-flip .identity-card.id-back:hover { position:absolute; inset:0; min-height:0; transform:rotateY(180deg); }
+
+/* Back of the card */
+.id-back-body { height:calc(100% - 52px); display:flex; flex-direction:column; gap:13px; padding:12px 22px 20px; color:#f1fff5; }
+.id-back h3 { margin:0; font-family:'Space Grotesk',sans-serif; font-size:26px; line-height:1; letter-spacing:-.055em; }
+.id-back h3 strong { color:#a8ff9a; font-weight:700; }
+.id-back-bio { margin:0; font-size:11px; line-height:1.65; color:#acd5b8; }
+.id-facts { list-style:none; margin:0; padding:0; display:grid; gap:10px; }
+.id-facts li { display:flex; justify-content:space-between; align-items:baseline; gap:14px; padding-bottom:9px; border-bottom:1px solid rgba(127,252,157,.16); }
+.id-facts small { flex:none; font-family:'Space Grotesk',sans-serif; font-size:7px; letter-spacing:.15em; color:#90c8a7; }
+.id-facts strong { font-weight:500; font-size:10px; line-height:1.4; text-align:right; color:#e8fff2; }
+.id-back-foot { margin-top:auto; display:flex; justify-content:space-between; align-items:center; gap:10px; }
+.id-back-links { display:flex; gap:7px; }
+.id-back-links a { border:1px solid rgba(180,255,201,.32); border-radius:6px; padding:6px 10px; font-size:9px; font-weight:700; letter-spacing:.04em; color:#b6ffb9; transition:background .25s, color .25s, transform .25s; }
+.id-back-links a:hover { background:#a8ff9a; color:#072414; transform:translateY(-2px); }
+.id-flip-hint { font-family:'Space Grotesk',sans-serif; font-size:7px; letter-spacing:.14em; color:#7fb894; }
+
+/* ===== ID back: photo + hobbies message ===== */
+.id-back-body { gap:12px; padding:12px 20px 18px; }
+.id-back-photo { position:relative; flex:none; height:160px; display:flex; justify-content:center; align-items:flex-end; overflow:hidden; border-radius:9px; border:1px solid rgba(128,255,186,.25); background:radial-gradient(circle at 50% 30%,#2a835b,#113528 69%,#081c15); }
+/* No scaling up and no filters: the cutout is shown at its natural sharpness */
+.id-back-photo img { display:block; height:100%; width:auto; max-width:100%; object-fit:contain; object-position:center bottom; image-rendering:auto; filter:none; }
+.id-back .id-back-bio { font-size:10.5px; line-height:1.55; }
+
+/* Keep the flipped card crisp: no scale and no floating while the back is showing */
+.id-flip.flipped, .id-flip.flipped:hover { transform:rotate(0deg) translateY(-8px); animation:none; }
+
+/* ID back: photo without a box, bigger */
+.id-back-photo { height:208px; border:0; border-radius:0; background:none; overflow:visible; margin-bottom:-2px; }
+.id-back-photo img { height:100%; max-width:none; }
