@@ -132,7 +132,7 @@ function About() {
       <div>
         <h2 className="section-heading">A little about<br/><span className="outline-text">the person.</span></h2>
         <p className="body-copy">I'm <strong>Kent G. Medina</strong>, an IT student at La Salle University Ozamiz who builds full-stack web apps and works with machine learning.</p>
-        <p className="body-copy"> I turn ideas into code, bugs into lessons, and coffee into projects. From building websites to developing full-stack systems, I enjoy figuring out how things work and making them work better. Currently on a mission to <strong>gain real-world experience, sharpen my skills, and build things that actually matter.</strong> </p>        
+        <p className="body-copy">For my capstone, I <strong>led the design and deployment of an inventory and sales system</strong> for a local business. I'm looking for an <strong>internship or entry-level web development role.</strong></p>
         <a className="text-link" href="#contact">Let's work together <Icon name="arrow" size={18}/></a>
       </div>
       <div className="skills-panel about-focus-panel">
@@ -187,6 +187,95 @@ function normalizeTechTool(tool) {
   return icon ? { name: tool.name, icon, color: tool.color } : null;
 }
 
+// Auto-scrolling logo row driven by JavaScript so it never stops on hover,
+// and can also be moved by dragging.
+function TechMarquee({ children, reverse = false, speed = 45 }) {
+  const rootRef = useRef(null);
+  const trackRef = useRef(null);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    const track = trackRef.current;
+    if (!root || !track) return undefined;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+
+    const direction = reverse ? -1 : 1;
+    const limit = 4000;
+    let offset = 0, velocity = 0, raf = 0, last = 0, running = true, drag = null;
+
+    // Width of one full set of logos = the distance after which the loop repeats.
+    const loopWidth = () => {
+      const [first, second] = track.children;
+      return first && second ? second.offsetLeft - first.offsetLeft : 0;
+    };
+
+    const frame = (now) => {
+      raf = requestAnimationFrame(frame);
+      const dt = Math.min((now - (last || now)) / 1000, 0.05);
+      last = now;
+      if (!running) return;
+      const width = loopWidth();
+      if (!width) return;
+      if (!drag) {
+        velocity *= Math.exp(-dt * 4); // drag momentum fades out
+        offset += (direction * speed + velocity) * dt;
+      }
+      offset = ((offset % width) + width) % width;
+      track.style.transform = `translate3d(${-offset}px,0,0)`;
+    };
+    raf = requestAnimationFrame(frame);
+
+    const onDown = (event) => {
+      if (event.pointerType === 'mouse' && event.button !== 0) return;
+      drag = { x: event.clientX, t: performance.now(), v: 0 };
+      root.classList.add('dragging');
+      root.setPointerCapture?.(event.pointerId);
+    };
+    const onMove = (event) => {
+      if (!drag) return;
+      const now = performance.now();
+      const dx = event.clientX - drag.x;
+      const dt = (now - drag.t) / 1000;
+      offset -= dx;
+      if (dt > 0) drag.v = drag.v * 0.7 + (-dx / dt) * 0.3;
+      drag.x = event.clientX;
+      drag.t = now;
+    };
+    const onUp = () => {
+      if (!drag) return;
+      velocity = Math.max(-limit, Math.min(limit, drag.v));
+      drag = null;
+      root.classList.remove('dragging');
+    };
+    const stopImageDrag = (event) => event.preventDefault();
+
+    root.addEventListener('pointerdown', onDown);
+    root.addEventListener('pointermove', onMove);
+    root.addEventListener('pointerup', onUp);
+    root.addEventListener('pointercancel', onUp);
+    root.addEventListener('dragstart', stopImageDrag);
+
+    // Pause the loop while the row is off-screen.
+    let observer;
+    if (typeof IntersectionObserver !== 'undefined') {
+      observer = new IntersectionObserver(([entry]) => { running = entry.isIntersecting; });
+      observer.observe(root);
+    }
+
+    return () => {
+      cancelAnimationFrame(raf);
+      observer?.disconnect();
+      root.removeEventListener('pointerdown', onDown);
+      root.removeEventListener('pointermove', onMove);
+      root.removeEventListener('pointerup', onUp);
+      root.removeEventListener('pointercancel', onUp);
+      root.removeEventListener('dragstart', stopImageDrag);
+    };
+  }, [reverse, speed]);
+
+  return <div className="tech-marquee" ref={rootRef}><div className="tech-track" ref={trackRef}>{children}</div></div>;
+}
+
 function TechStack() {
   const [unavailable, setUnavailable] = useState([]);
   const [inView, setInView] = useState(false);
@@ -230,8 +319,7 @@ function TechStack() {
         const setItems = Array.from({ length: repeats }, () => group.items).flat();
         return <div className="tech-category" key={group.label}>
           <h3>{group.label}</h3>
-          <div className="tech-marquee" style={{ '--duration': `${Math.max(setItems.length * 3.2, 36)}s` }}>
-            <div className={`tech-track ${groupIndex % 2 ? 'reverse' : ''}`}>
+          <TechMarquee reverse={groupIndex % 2 === 1}>
               {[0, 1].map((copy) => <div className="tech-set" key={copy} aria-hidden={copy === 1 ? 'true' : undefined}>
                 {setItems.map((tool, i) => {
                   const iconPath = tool.icon.replace(':', '/');
@@ -247,8 +335,7 @@ function TechStack() {
                   </div>;
                 })}
               </div>)}
-            </div>
-          </div>
+          </TechMarquee>
         </div>;
       })}
     </div>
@@ -343,5 +430,6 @@ export default function App() {
   }, [theme]);
   return <><GalaxyBackground/><Header theme={theme} toggleTheme={() => setTheme(t => t === 'dark' ? 'light' : 'dark')}/><main><Hero/><Metrics/><About/><TechStack/><Education/><Projects/><Certificates openCert={setActiveCert}/><Contact/></main><Footer/><CertificateModal cert={activeCert} onClose={() => setActiveCert(null)}/></>;
 }
+
 
 

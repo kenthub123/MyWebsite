@@ -5,7 +5,7 @@ export const projects = [
     type: "Personal Project",
     image: "/assets/projects/facedet.jpg",
     desc: "Real-time webcam app that detects smile, frown, and surprise and shows a matching reference photo.",
-    stack: "JavaScript, MediaPipe Face Mesh",
+    stack: "JavaScript, MediaPipe, HTML, CSS",
     url: "https://kenthub123.github.io/dogface/",
     tags: ["html", "js"]
   },
@@ -14,7 +14,7 @@ export const projects = [
     type: "Machine Learning Project",
     image: "/assets/projects/chess-elo.jpg",
     desc: "A two-player chess game that predicts the Elo rating of both players from a single game using XGBRegressor.",
-    stack: "Python, HTML, CSS, JavaScript, XGBRegressor, NumPy, Pandas",
+    stack: "Python,Flask, HTML, CSS, JavaScript, XGBRegressor, NumPy, Pandas",
     url: "https://chesselo-rho.vercel.app/",
     tags: ["python", "html", "js"]
   },
@@ -32,7 +32,7 @@ export const projects = [
     type: "Personal Project",
     image: "/assets/projects/portfolio.jpg",
     desc: "A responsive portfolio with filterable projects and embedded e-certificates, built with React and deployed on Vercel.",
-    stack: "React, HTML, CSS, JavaScript, Vercel",
+    stack: "React, HTML, CSS, JavaScript",
     url: "https://medina-portfolio-five.vercel.app/",
     tags: ["react", "html", "js"]
   }
